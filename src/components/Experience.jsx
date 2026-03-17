@@ -8,13 +8,13 @@ const experiences = [
     color: "rose",
     icon: "💼",
     points: [
-      "Developed and maintained 3+ production-ready Django applications following MVT architecture",
+      "Developed and maintained 10+ production-ready Django applications following MVT architecture",
       "Built RESTful APIs for user management, authentication, and role-based access control",
       "Improved page load performance by ~30% through query optimization and efficient ORM usage",
       "Implemented responsive UI using Bootstrap, ensuring compatibility across mobile and desktop",
       "Used Git for version control and collaborated with cross-functional teams",
     ],
-    tags: ["Python", "Django", "REST API", "Bootstrap", "Git", "MySQL"],
+    tags: ["Python", "Django", "Vercel", "Bootstrap", "Git", "MySQL"],
   },
   {
     type: "work",
@@ -28,7 +28,7 @@ const experiences = [
       "Gained comprehensive experience in full-stack web development using Python and Django",
       "Built and deployed dynamic web applications with responsive interfaces",
       "Worked with HTML, CSS, JavaScript, and Bootstrap for frontend development",
-      "Developed efficient backend functionality and RESTful endpoints",
+      
     ],
     tags: ["Python", "Django", "HTML", "CSS", "JavaScript", "Bootstrap"],
   },

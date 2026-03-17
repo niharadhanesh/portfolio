@@ -280,15 +280,19 @@ export default function Hero() {
           margin-bottom: 4px;
           font-family: var(--font-display);
         }
-        .hero-name .word-first { color: var(--text); }
-        .hero-name .word-last {
-          display: block;
+        .hero-name .word-first {
+          display: inline;
           background: linear-gradient(120deg, #fb7aa0 0%, #f43f6e 35%, #c084fc 75%, #a78bfa 100%);
           background-size: 200% auto;
           -webkit-background-clip: text;
           -webkit-text-fill-color: transparent;
           background-clip: text;
           animation: shimmer-name 4s linear infinite;
+        }
+        .hero-name .word-last {
+          display: block;
+          color: var(--text);
+          -webkit-text-fill-color: var(--text);
         }
         @keyframes shimmer-name {
           0%   { background-position: 0% center; }
@@ -630,11 +634,13 @@ export default function Hero() {
           50%     { opacity: 0.75; }
         }
 
-        /* ── Responsive ── */
+        /* ── Responsive: Tablet ── */
         @media (max-width: 1100px) {
           .side-badges { display: none; }
           .hero-grid { grid-template-columns: 1fr 400px; gap: 40px; }
         }
+
+        /* ── Responsive: Standard Mobile (≤860px) — Galaxy S20 Ultra etc ── */
         @media (max-width: 860px) {
           .hero-grid {
             grid-template-columns: 1fr;
@@ -648,10 +654,159 @@ export default function Hero() {
           .hero-right    { max-width: 480px; margin: 0 auto; }
           .hero-role-row { justify-content: center; }
         }
+
+        /* ── Responsive: Small Mobile (≤480px) ── */
         @media (max-width: 480px) {
           .hero-stats { flex-wrap: wrap; }
           .stat-cell  { min-width: 45%; }
           .hero-name  { font-size: 2.8rem; }
+        }
+
+        /* ── Responsive: Galaxy Z Fold 5 folded & ultra-narrow (≤345px) ── */
+        @media (max-width: 345px) {
+          .hero {
+            padding-top: 70px;
+            padding-bottom: 60px;
+          }
+
+          .hero-grid {
+            width: 94%;
+            gap: 32px;
+          }
+
+          /* Eyebrow badge — shrink text & padding to fit narrow screen */
+          .hero-eyebrow {
+            font-size: 0.62rem;
+            letter-spacing: 0.08em;
+            padding: 6px 12px;
+            gap: 7px;
+            max-width: 100%;
+            white-space: normal;
+            text-align: center;
+            line-height: 1.4;
+          }
+
+          /* Name — scale down for ~260px viewport */
+          .hero-name {
+            font-size: clamp(1.9rem, 9.5vw, 2.4rem);
+            line-height: 1.08;
+          }
+          .hero-name .word-hi {
+            font-size: 0.55em;
+          }
+
+          /* Role row — wrap so prefix + role don't overflow */
+          .hero-role-row {
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 4px;
+            margin-top: 12px;
+            margin-bottom: 16px;
+          }
+          .role-prefix {
+            font-size: 0.82rem;
+          }
+          .hero-role {
+            font-size: 0.85rem;
+          }
+
+          /* Description */
+          .hero-desc {
+            font-size: 0.83rem;
+            line-height: 1.7;
+            margin-bottom: 22px;
+          }
+
+          /* Buttons — full-width stacked column */
+          .hero-actions {
+            flex-direction: column;
+            align-items: stretch;
+            gap: 10px;
+            margin-bottom: 28px;
+          }
+          .btn-glow,
+          .btn-ghost {
+            width: 100%;
+            justify-content: center;
+            padding: 12px 16px;
+            font-size: 0.85rem;
+            border-radius: 12px;
+            box-sizing: border-box;
+          }
+
+          /* Stats card — 2×2 grid layout */
+          .hero-stats {
+            flex-wrap: wrap;
+            border-radius: 12px;
+            max-width: 100%;
+          }
+          .stat-cell {
+            min-width: 50%;
+            flex: 0 0 50%;
+            padding: 12px 6px;
+            box-sizing: border-box;
+          }
+          /* Override the pseudo-element divider and use explicit borders */
+          .stat-cell:not(:last-child)::after {
+            display: none;
+          }
+          .stat-cell:nth-child(1),
+          .stat-cell:nth-child(2) {
+            border-bottom: 1px solid var(--border);
+          }
+          .stat-cell:nth-child(odd) {
+            border-right: 1px solid var(--border);
+          }
+          .stat-num {
+            font-size: 1.35rem;
+          }
+          .stat-lbl {
+            font-size: 0.58rem;
+            letter-spacing: 0.04em;
+          }
+
+          /* Terminal — scale down to prevent overflow */
+          .terminal-body {
+            padding: 10px 12px 14px;
+            font-size: 0.68rem;
+            line-height: 1.65;
+            min-height: 190px;
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+          }
+          .terminal-header {
+            padding: 9px 12px;
+            gap: 5px;
+          }
+          .t-dot {
+            width: 9px;
+            height: 9px;
+          }
+          .t-filename {
+            font-size: 0.65rem;
+            margin-left: 6px;
+          }
+          .code-line {
+            gap: 8px;
+          }
+          .line-num {
+            font-size: 0.58rem;
+            min-width: 12px;
+          }
+          .term-cursor {
+            width: 5px;
+            height: 10px;
+          }
+
+          /* bg watermark text */
+          .hero-bg-text {
+            font-size: clamp(4.5rem, 28vw, 7rem);
+          }
+
+          /* Scroll cue — hide to save vertical space */
+          .scroll-cue {
+            display: none;
+          }
         }
       `}</style>
 
@@ -690,7 +845,6 @@ export default function Hero() {
                 <strong> clean, scalable, high-performance</strong> code that delivers
                 reliable results and works smoothly in production.
             </p>
-                    
 
             <div className="hero-actions">
               <a href="#projects" className="btn-glow">

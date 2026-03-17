@@ -43,7 +43,7 @@ const contactItems = [
     ),
     label: "LinkedIn",
     value: "Connect with me",
-    href: "https://linkedin.com",
+    href: "https://linkedin.com/in/nihara-dhanesh-813b053a4",
     color: "lav",
   },
 ];
@@ -213,7 +213,7 @@ export default function Contact() {
                       <path d="M5 12h14M12 5l7 7-7 7"/>
                     </svg>
                   </a>
-                  <a href="https://linkedin.com" target="_blank" rel="noreferrer" className="btn btn-outline">
+                  <a href="https://linkedin.com/in/nihara-dhanesh-813b053a4" target="_blank" rel="noreferrer" className="btn btn-outline">
                     LinkedIn
                   </a>
                 </div>

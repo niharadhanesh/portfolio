@@ -30,12 +30,10 @@ export default function Navbar() {
       <style>{`
         .navbar {
           position: fixed;
-          top: 0;
-          left: 0;
+          top: 0; left: 0;
           width: 100%;
           z-index: 1000;
           transition: all 0.4s ease;
-          padding: 0;
         }
         .navbar.scrolled {
           background: rgba(13, 8, 18, 0.92);
@@ -72,7 +70,6 @@ export default function Navbar() {
           padding: 7px 14px;
           border-radius: 50px;
           transition: all 0.25s ease;
-          position: relative;
           font-family: var(--font-body);
         }
         .nav-link:hover { color: var(--text); }
@@ -89,26 +86,55 @@ export default function Navbar() {
           box-shadow: 0 6px 24px rgba(244,63,110,0.5);
           transform: translateY(-1px);
         }
-        .hamburger {
+
+        /* Icon-only toggle button */
+        .menu-toggle {
           display: none;
-          flex-direction: column;
-          gap: 5px;
-          background: none;
-          border: none;
+          width: 42px;
+          height: 42px;
+          border-radius: 12px;
+          background: rgba(244, 63, 110, 0.08);
+          border: 1px solid rgba(244, 63, 110, 0.25);
           cursor: pointer;
-          padding: 6px;
+          align-items: center;
+          justify-content: center;
+          transition: all 0.25s ease;
+          padding: 0;
+          flex-shrink: 0;
         }
-        .hamburger span {
+        .menu-toggle:hover {
+          background: rgba(244, 63, 110, 0.15);
+          border-color: rgba(244, 63, 110, 0.45);
+        }
+        .toggle-icon {
+          width: 18px;
+          height: 14px;
+          position: relative;
+          display: flex;
+          flex-direction: column;
+          justify-content: space-between;
+        }
+        .toggle-icon span {
           display: block;
-          width: 24px;
+          width: 100%;
           height: 2px;
-          background: var(--text);
           border-radius: 2px;
+          background: var(--rose-light);
           transition: all 0.3s ease;
+          transform-origin: center;
         }
-        .hamburger.open span:nth-child(1) { transform: rotate(45deg) translate(5px, 5px); }
-        .hamburger.open span:nth-child(2) { opacity: 0; }
-        .hamburger.open span:nth-child(3) { transform: rotate(-45deg) translate(5px, -5px); }
+        .menu-toggle.open .toggle-icon span:nth-child(1) {
+          transform: translateY(6px) rotate(45deg);
+        }
+        .menu-toggle.open .toggle-icon span:nth-child(2) {
+          opacity: 0;
+          transform: scaleX(0);
+        }
+        .menu-toggle.open .toggle-icon span:nth-child(3) {
+          transform: translateY(-6px) rotate(-45deg);
+        }
+
+        /* Mobile overlay */
         .mobile-menu {
           display: none;
           position: fixed;
@@ -131,16 +157,48 @@ export default function Navbar() {
           transition: color 0.2s;
         }
         .mobile-link:hover { color: var(--rose-light); }
+
+        /* Close button inside overlay — X icon only, no text */
         .mobile-close {
           position: absolute;
-          top: 22px; right: 5%;
-          font-size: 2rem;
-          color: var(--text-muted);
-          background: none; border: none; cursor: pointer;
+          top: 20px; right: 5%;
+          width: 42px;
+          height: 42px;
+          border-radius: 12px;
+          background: rgba(244, 63, 110, 0.08);
+          border: 1px solid rgba(244, 63, 110, 0.25);
+          cursor: pointer;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          padding: 0;
+          transition: all 0.25s ease;
         }
+        .mobile-close:hover {
+          background: rgba(244, 63, 110, 0.18);
+          border-color: rgba(244, 63, 110, 0.5);
+        }
+        .close-icon {
+          width: 14px;
+          height: 14px;
+          position: relative;
+        }
+        .close-icon::before,
+        .close-icon::after {
+          content: '';
+          position: absolute;
+          top: 50%; left: 0;
+          width: 100%;
+          height: 2px;
+          border-radius: 2px;
+          background: var(--rose-light);
+        }
+        .close-icon::before { transform: translateY(-50%) rotate(45deg); }
+        .close-icon::after  { transform: translateY(-50%) rotate(-45deg); }
+
         @media (max-width: 768px) {
           .nav-links { display: none; }
-          .hamburger { display: flex; }
+          .menu-toggle { display: flex; }
         }
       `}</style>
 
@@ -160,14 +218,25 @@ export default function Navbar() {
               </li>
             ))}
           </ul>
-          <button className={`hamburger ${open ? "open" : ""}`} onClick={() => setOpen(!open)} aria-label="menu">
-            <span /><span /><span />
+
+          <button
+            className={`menu-toggle ${open ? "open" : ""}`}
+            onClick={() => setOpen(!open)}
+            aria-label="Toggle menu"
+          >
+            <div className="toggle-icon">
+              <span />
+              <span />
+              <span />
+            </div>
           </button>
         </div>
       </nav>
 
       <div className={`mobile-menu ${open ? "open" : ""}`}>
-        <button className="mobile-close" onClick={() => setOpen(false)}>✕</button>
+        <button className="mobile-close" onClick={() => setOpen(false)} aria-label="Close menu">
+          <div className="close-icon" />
+        </button>
         {links.map((l) => (
           <a key={l.href} href={l.href} className="mobile-link" onClick={() => handleNav(l.href)}>
             {l.label}

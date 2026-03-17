@@ -50,7 +50,7 @@ export default function Footer() {
         <div className="footer-inner">
           <div className="footer-logo">Nihara.</div>
           <div className="footer-copy">
-            © 2026 Nihara Dhanesh. Built with <span>♥</span> in Kerala.
+            © 2026 Nihara Dhanesh. Built with <span>♥</span> 
           </div>
           <div className="footer-links">
             <a href="#home" className="footer-link">Home</a>

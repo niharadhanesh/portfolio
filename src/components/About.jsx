@@ -2,7 +2,7 @@ export default function About() {
   const highlights = [
     { icon: "🎯", title: "Problem Solver", desc: "Tackled real-world challenges in healthcare, billing, and fleet management systems." },
     { icon: "⚡", title: "Performance Focus", desc: "Improved page load times by ~30% through query optimization and smart ORM usage." },
-    { icon: "🔗", title: "API Expert", desc: "Built RESTful APIs for auth, user management, and role-based access at production scale." },
+    { icon: "⚙️", title: "Django Developer", desc: "Built robust Django applications with secure authentication, user management, and role-based features for real-world projects." },
     { icon: "📱", title: "Responsive Design", desc: "Every project seamlessly adapts across mobile, tablet and desktop viewports." },
   ];
 
@@ -24,7 +24,6 @@ export default function About() {
           gap: 70px;
           align-items: start;
         }
-        .about-left { }
         .about-bio {
           color: var(--text-muted);
           font-size: 1.02rem;
@@ -50,23 +49,9 @@ export default function About() {
           background: var(--bg-card-hover);
           transform: translateY(-3px);
         }
-        .hl-icon {
-          font-size: 1.4rem;
-          margin-bottom: 8px;
-          display: block;
-        }
-        .hl-title {
-          font-size: 0.88rem;
-          font-weight: 600;
-          color: var(--text);
-          margin-bottom: 4px;
-        }
-        .hl-desc {
-          font-size: 0.8rem;
-          color: var(--text-dim);
-          line-height: 1.5;
-        }
-        .about-right { }
+        .hl-icon { font-size: 1.4rem; margin-bottom: 8px; display: block; }
+        .hl-title { font-size: 0.88rem; font-weight: 600; color: var(--text); margin-bottom: 4px; }
+        .hl-desc { font-size: 0.8rem; color: var(--text-dim); line-height: 1.5; }
         .facts-card {
           background: var(--bg-card);
           border: 1px solid var(--border);
@@ -89,11 +74,29 @@ export default function About() {
           padding: 11px 0;
           border-bottom: 1px solid var(--border);
           font-size: 0.9rem;
+          gap: 12px;
         }
         .fact-row:last-child { border-bottom: none; }
-        .fact-label { color: var(--text-dim); }
-        .fact-value { color: var(--text); font-weight: 500; text-align: right; max-width: 55%; }
-        .fact-value a { color: var(--rose-light); }
+        .fact-label {
+          color: var(--text-dim);
+          flex-shrink: 0;
+        }
+        .fact-value {
+          color: var(--text);
+          font-weight: 500;
+          text-align: right;
+          min-width: 0;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          white-space: nowrap;
+        }
+        .fact-value a {
+          color: var(--rose-light);
+          overflow: hidden;
+          text-overflow: ellipsis;
+          white-space: nowrap;
+          display: block;
+        }
         .social-row {
           display: flex;
           gap: 12px;
@@ -125,6 +128,8 @@ export default function About() {
         }
         @media (max-width: 480px) {
           .about-highlights { grid-template-columns: 1fr; }
+          .facts-card { padding: 20px 16px; }
+          .fact-row { font-size: 0.82rem; }
         }
       `}</style>
 
@@ -143,7 +148,7 @@ export default function About() {
                 <strong>actually work at scale</strong>.
               </p>
               <p className="about-bio">
-                At Altos Technologies, I developed and shipped <strong>3+ Django applications</strong>,
+                At Altos Technologies, I developed and shipped <strong>10+ Django Websites</strong>,
                 built authentication systems, designed role-based access, and slashed load
                 times by optimizing queries and ORM usage. I'm comfortable owning both the
                 backend logic and the frontend experience.
@@ -180,14 +185,14 @@ export default function About() {
               </div>
 
               <div className="social-row">
-                <a href="https://linkedin.com" target="_blank" rel="noreferrer" className="social-btn">
+                <a href="https://linkedin.com/in/nihara-dhanesh-813b053a4" target="_blank" rel="noreferrer" className="social-btn">
                   <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
                     <path d="M16 8a6 6 0 016 6v7h-4v-7a2 2 0 00-2-2 2 2 0 00-2 2v7h-4v-7a6 6 0 016-6zM2 9h4v12H2z"/>
                     <circle cx="4" cy="4" r="2"/>
                   </svg>
                   LinkedIn
                 </a>
-                <a href="https://github.com" target="_blank" rel="noreferrer" className="social-btn">
+                <a href="https://github.com/niharadhanesh" target="_blank" rel="noreferrer" className="social-btn">
                   <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
                     <path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 00-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0020 4.77 5.07 5.07 0 0019.91 1S18.73.65 16 2.48a13.38 13.38 0 00-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 005 4.77a5.44 5.44 0 00-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 009 18.13V22"/>
                   </svg>
