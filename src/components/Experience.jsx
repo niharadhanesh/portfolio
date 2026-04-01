@@ -15,7 +15,7 @@ function useReveal(threshold = 0.1) {
   return [ref, visible];
 }
 
-/* ── animated counter (same as hero/about) ── */
+/* ── animated counter ── */
 function Counter({ to, suffix = "" }) {
   const [val, setVal] = useState(0);
   const ref  = useRef(null);
@@ -166,7 +166,7 @@ function ExpCard({ e, index, visible }) {
               </div>
             )}
             <div className="exp-header-row">
-              <div>
+              <div className="exp-title-group">
                 <div className="exp-role">{e.role}</div>
                 <div className="exp-company">{e.company}</div>
               </div>
@@ -193,7 +193,7 @@ function ExpCard({ e, index, visible }) {
           {e.points.map((pt, j) => (
             <div key={j} className="exp-point" style={{ animationDelay: `${j * 0.06}s` }}>
               <span className="exp-bullet" style={{ background: e.accent }} />
-              {pt}
+              <span className="exp-point-text">{pt}</span>
             </div>
           ))}
         </div>
@@ -263,7 +263,11 @@ export default function Experience() {
           overflow: hidden;
           font-family: var(--ff-body);
           color: var(--ink);
+          box-sizing: border-box;
         }
+
+        *, *::before, *::after { box-sizing: inherit; }
+
         #experience::before {
           content: '';
           position: absolute; inset: 0; pointer-events: none;
@@ -273,16 +277,22 @@ export default function Experience() {
           background-size: 80px 80px;
         }
 
-        /* blobs — right blob pulled up and shrunk; left blob unchanged */
         .exp-blob { position:absolute; pointer-events:none; z-index:0; }
-        .exp-blob-a { width:360px; height:360px; bottom:80px; right:-60px; animation:exp-orbit 28s linear infinite; }
-        .exp-blob-b { width:360px;height:360px;top:10%;left:-100px; animation:exp-orbit 22s linear infinite reverse; }
+        .exp-blob-a { width:280px; height:280px; bottom:80px; right:-60px; animation:exp-orbit 28s linear infinite; }
+        .exp-blob-b { width:280px; height:280px; top:10%; left:-80px; animation:exp-orbit 22s linear infinite reverse; }
         @keyframes exp-orbit {
           0%  { transform:rotate(0deg)   translateX(22px) rotate(0deg)   }
           100%{ transform:rotate(360deg) translateX(22px) rotate(-360deg) }
         }
 
-        .exp-container { max-width:1200px; margin:0 auto; padding:0 6%; position:relative; z-index:2; }
+        .exp-container {
+          max-width: 1200px;
+          margin: 0 auto;
+          padding: 0 5%;
+          position: relative;
+          z-index: 2;
+          width: 100%;
+        }
 
         /* header */
         .exp-eyebrow {
@@ -290,9 +300,9 @@ export default function Experience() {
           text-transform:uppercase; color:var(--violet);
           display:flex; align-items:center; gap:12px; margin-bottom:18px;
         }
-        .exp-eyebrow-line { height:1px; width:36px; background:rgba(155,93,229,0.38); }
+        .exp-eyebrow-line { height:1px; width:36px; background:rgba(155,93,229,0.38); flex-shrink:0; }
         .exp-heading {
-          font-family:var(--ff-head); font-size:clamp(3rem,6vw,5.5rem);
+          font-family:var(--ff-head); font-size:clamp(2.6rem,6vw,5.5rem);
           line-height:.92; letter-spacing:.02em; margin-bottom:10px; color:var(--ink);
         }
         .exp-heading-accent {
@@ -311,9 +321,15 @@ export default function Experience() {
         }
 
         /* layout */
-        .exp-layout { display:grid; grid-template-columns:3fr 2fr; gap:60px; align-items:start; }
+        .exp-layout {
+          display:grid;
+          grid-template-columns: 3fr 2fr;
+          gap: 60px;
+          align-items: start;
+          width: 100%;
+        }
 
-        /* ── col labels ── */
+        /* col labels */
         .exp-col-label {
           font-family:var(--ff-mono); font-size:.68rem; letter-spacing:.18em;
           text-transform:uppercase; color:var(--ink3);
@@ -321,7 +337,7 @@ export default function Experience() {
         }
         .exp-col-label::before { content:'//'; color:var(--rose); opacity:.7; }
 
-        /* ── timeline ── */
+        /* timeline */
         .exp-timeline { position:relative; padding-left:52px; }
         .exp-timeline-track {
           position:absolute; left:19px; top:0; bottom:0; width:1px;
@@ -356,6 +372,7 @@ export default function Experience() {
           display:flex; align-items:center; justify-content:center;
           font-size:1.1rem; z-index:2;
           transition:border-color .3s, box-shadow .3s;
+          flex-shrink: 0;
         }
         .exp-tl-dot.active {
           border-color:var(--dot-color);
@@ -379,13 +396,15 @@ export default function Experience() {
           overflow:hidden; position:relative;
           transition:border-color .3s,box-shadow .3s;
           cursor:pointer;
+          width: 100%;
+          min-width: 0;
         }
         .exp-card:hover {
           border-color:var(--acc-border);
           box-shadow:0 18px 56px rgba(0,0,0,.5), 0 0 30px var(--acc-glow);
         }
 
-        /* scan animation (active card) */
+        /* scan animation */
         .exp-scan {
           position:absolute; top:0; left:0; right:0; height:2px;
           background:linear-gradient(90deg,transparent,var(--rose) 40%,var(--violet) 60%,transparent);
@@ -395,8 +414,12 @@ export default function Experience() {
         @keyframes exp-scan-anim { 0%,100%{opacity:.25} 50%{opacity:1} }
 
         .exp-card-top {
-          display:flex; align-items:flex-start; justify-content:space-between;
-          gap:12px; padding:20px 22px 14px; flex-wrap:wrap;
+          display:flex;
+          align-items:flex-start;
+          justify-content:space-between;
+          gap:12px;
+          padding:20px 18px 14px;
+          flex-wrap: wrap;
         }
         .exp-card-meta { flex:1; min-width:0; }
 
@@ -409,6 +432,7 @@ export default function Experience() {
           width:6px; height:6px; border-radius:50%; background:#4ade80;
           animation:exp-live-pulse 1.8s ease-in-out infinite;
           box-shadow:0 0 8px #4ade80;
+          flex-shrink: 0;
         }
         @keyframes exp-live-pulse {
           0%,100% { transform:scale(1); opacity:1; }
@@ -416,15 +440,31 @@ export default function Experience() {
         }
 
         .exp-header-row {
-          display:flex; align-items:flex-start; justify-content:space-between; gap:12px;
+          display:flex;
+          align-items:flex-start;
+          justify-content:space-between;
+          gap:10px;
+          flex-wrap: wrap;
         }
-        .exp-role { font-family:var(--ff-head); font-size:1.55rem; letter-spacing:.02em; color:var(--ink); line-height:1.05; }
-        .exp-company { font-family:var(--ff-mono); font-size:.7rem; letter-spacing:.1em; color:var(--acc); margin-top:4px; text-transform:uppercase; }
+        .exp-title-group { min-width: 0; flex: 1; }
+        .exp-role {
+          font-family:var(--ff-head);
+          font-size:clamp(1.2rem, 3.5vw, 1.55rem);
+          letter-spacing:.02em; color:var(--ink); line-height:1.05;
+          word-break: break-word;
+        }
+        .exp-company {
+          font-family:var(--ff-mono); font-size:.7rem; letter-spacing:.1em;
+          color:var(--acc); margin-top:4px; text-transform:uppercase;
+          word-break: break-word;
+        }
 
-        .exp-period-wrap { display:flex; flex-direction:column; align-items:flex-end; gap:6px; flex-shrink:0; }
+        .exp-period-wrap {
+          display:flex; flex-direction:column; align-items:flex-end; gap:6px; flex-shrink:0;
+        }
         .exp-period {
           font-family:var(--ff-mono); font-size:.7rem; letter-spacing:.1em;
-          padding:4px 12px; border-radius:4px;
+          padding:4px 10px; border-radius:4px;
           background:rgba(255,255,255,.04); border:1px solid rgba(255,255,255,.08);
           color:var(--ink3); white-space:nowrap;
         }
@@ -432,17 +472,18 @@ export default function Experience() {
 
         /* stat badge */
         .exp-stat-badge {
-          padding:12px 16px; border-radius:10px;
+          padding:10px 14px; border-radius:10px;
           background:rgba(255,255,255,.018); border:1px solid rgba(155,93,229,.1);
-          text-align:center; flex-shrink:0; min-width:80px;
+          text-align:center; flex-shrink:0; min-width:72px;
+          align-self: flex-start;
         }
         .exp-stat-num {
-          font-family:var(--ff-head); font-size:1.8rem; line-height:1; display:block;
+          font-family:var(--ff-head); font-size:1.6rem; line-height:1; display:block;
           background:linear-gradient(135deg,var(--ink) 40%,var(--ink2));
           -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
         }
         .exp-stat-lbl {
-          font-family:var(--ff-mono); font-size:.55rem; letter-spacing:.1em;
+          font-family:var(--ff-mono); font-size:.52rem; letter-spacing:.1em;
           text-transform:uppercase; color:var(--ink3); margin-top:3px; display:block;
         }
 
@@ -450,45 +491,60 @@ export default function Experience() {
         .exp-points {
           max-height:0; overflow:hidden;
           transition:max-height .4s ease, padding .3s ease;
-          padding:0 22px;
+          padding:0 18px;
         }
-        .exp-points.expanded { max-height:400px; padding:4px 22px 16px; }
+        .exp-points.expanded { max-height:600px; padding:4px 18px 16px; }
         .exp-point {
           display:flex; align-items:flex-start; gap:10px;
-          font-size:.84rem; color:var(--ink2); line-height:1.65; margin-bottom:7px;
+          font-size:.84rem; color:var(--ink2); line-height:1.65; margin-bottom:8px;
           opacity:0; transform:translateX(-8px);
           animation:exp-pt-in .35s ease forwards;
+          width: 100%;
+          min-width: 0;
         }
         .exp-points.expanded .exp-point { animation:exp-pt-in .35s ease forwards; }
         @keyframes exp-pt-in { to { opacity:1; transform:translateX(0); } }
-        .exp-bullet { width:5px; height:5px; border-radius:50%; flex-shrink:0; margin-top:7px; }
+        .exp-bullet {
+          width:5px; height:5px; border-radius:50%;
+          flex-shrink:0; margin-top:8px;
+        }
+        .exp-point-text {
+          flex: 1;
+          min-width: 0;
+          word-wrap: break-word;
+          overflow-wrap: break-word;
+        }
 
         /* tags */
-        .exp-tags { display:flex; flex-wrap:wrap; gap:6px; padding:0 22px 16px; }
+        .exp-tags {
+          display:flex; flex-wrap:wrap; gap:6px; padding:0 18px 16px;
+        }
         .exp-tag {
           font-family:var(--ff-mono); font-size:.62rem; letter-spacing:.06em;
           padding:4px 10px; border-radius:4px;
           background:color-mix(in srgb, var(--tag-color) 8%, transparent);
           border:1px solid color-mix(in srgb, var(--tag-color) 24%, transparent);
           color:var(--tag-color); transition:all .2s;
+          white-space: nowrap;
         }
         .exp-card:hover .exp-tag { filter:brightness(1.15); }
 
         .exp-expand-hint {
           text-align:center; font-family:var(--ff-mono); font-size:.58rem;
           letter-spacing:.12em; text-transform:uppercase; color:var(--ink3);
-          padding:10px 22px 14px; border-top:1px solid rgba(155,93,229,.08);
+          padding:10px 18px 14px; border-top:1px solid rgba(155,93,229,.08);
           transition:color .2s;
         }
         .exp-card:hover .exp-expand-hint { color:var(--ink2); }
 
-        /* ── education cards ── */
+        /* education cards */
         .edu-card {
           border-radius:16px; background:rgba(255,255,255,.022);
           border:1px solid rgba(155,93,229,.1);
           overflow:hidden; margin-bottom:14px;
           position:relative; transition:all .3s;
           opacity:0; transform:translateX(20px);
+          width: 100%;
         }
         .edu-card.visible { animation:exp-slide-right .55s ease forwards; }
         @keyframes exp-slide-right { to { opacity:1; transform:translateX(0); } }
@@ -502,64 +558,172 @@ export default function Experience() {
           box-shadow:0 12px 40px rgba(0,0,0,.4);
           transform:translateY(-3px);
         }
-        .edu-inner { display:flex; gap:14px; padding:18px 20px; }
+        .edu-inner { display:flex; gap:14px; padding:18px; align-items:flex-start; }
         .edu-icon-wrap {
           width:40px; height:40px; border-radius:10px; flex-shrink:0;
           background:color-mix(in srgb,var(--edu-acc) 8%,transparent);
           border:1px solid color-mix(in srgb,var(--edu-acc) 22%,transparent);
           display:flex; align-items:center; justify-content:center; font-size:1.3rem;
         }
-        .edu-degree { font-family:var(--ff-body); font-weight:700; font-size:.92rem; color:var(--ink); margin-bottom:3px; }
-        .edu-school { font-family:var(--ff-mono); font-size:.65rem; letter-spacing:.08em; color:var(--edu-acc); text-transform:uppercase; margin-bottom:4px; }
+        .edu-content { min-width: 0; flex: 1; }
+        .edu-degree {
+          font-family:var(--ff-body); font-weight:700; font-size:.9rem;
+          color:var(--ink); margin-bottom:3px;
+          word-wrap: break-word; overflow-wrap: break-word;
+        }
+        .edu-school {
+          font-family:var(--ff-mono); font-size:.65rem; letter-spacing:.08em;
+          color:var(--edu-acc); text-transform:uppercase; margin-bottom:4px;
+        }
         .edu-period { font-family:var(--ff-mono); font-size:.65rem; color:var(--ink3); margin-bottom:7px; }
-        .edu-desc { font-size:.8rem; color:var(--ink2); line-height:1.6; }
+        .edu-desc { font-size:.8rem; color:var(--ink2); line-height:1.6; word-wrap:break-word; }
 
-        /* ── stats strip (bottom) ── */
+        /* stats strip */
         .exp-stats-strip {
           display:flex; gap:0;
           margin-top:64px;
           border:1px solid rgba(155,93,229,.12); border-radius:16px;
           overflow:hidden; background:rgba(255,255,255,.016);
+          flex-wrap: wrap;
         }
         .exp-strip-cell {
-          flex:1; padding:20px 16px; text-align:center;
+          flex: 1 1 auto;
+          min-width: 0;
+          padding:20px 12px; text-align:center;
           border-right:1px solid rgba(155,93,229,.08); transition:background .25s;
         }
         .exp-strip-cell:last-child { border-right:none; }
         .exp-strip-cell:hover { background:rgba(155,93,229,.05); }
         .exp-strip-num {
-          font-family:var(--ff-head); font-size:clamp(1.8rem,3vw,2.4rem); line-height:1;
+          font-family:var(--ff-head); font-size:clamp(1.6rem,3vw,2.4rem); line-height:1;
           background:linear-gradient(135deg,var(--ink) 40%,var(--ink2));
           -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
           display:block;
         }
         .exp-strip-lbl {
-          font-family:var(--ff-mono); font-size:.58rem; letter-spacing:.14em;
+          font-family:var(--ff-mono); font-size:.55rem; letter-spacing:.12em;
           text-transform:uppercase; color:var(--ink3); margin-top:4px; display:block;
         }
 
-        /* ── responsive ── */
-        @media (max-width:900px) {
-          .exp-layout { grid-template-columns:1fr; gap:40px; }
+        /* ── RESPONSIVE ── */
+
+        /* Tablet */
+        @media (max-width: 900px) {
+          .exp-layout {
+            grid-template-columns: 1fr;
+            gap: 40px;
+          }
+          .exp-blob-a { width:220px; height:220px; right:-50px; bottom:40px; }
+          .exp-blob-b { width:220px; height:220px; left:-60px; }
         }
-        @media (max-width:600px) {
-          #experience { padding:80px 0 90px; }
-          .exp-timeline { padding-left:44px; }
-          .exp-tl-dot { left:-44px; width:32px; height:32px; font-size:.9rem; }
-          .exp-card-top { flex-direction:column; }
-          .exp-stats-strip { flex-wrap:wrap; }
-          .exp-strip-cell { flex:1 1 45%; border-bottom:1px solid rgba(155,93,229,.08); }
+
+        /* Mobile */
+        @media (max-width: 600px) {
+          #experience { padding: 72px 0 80px; }
+
+          .exp-container { padding: 0 4%; }
+
+          /* timeline: tighten left gutter */
+          .exp-timeline { padding-left: 44px; }
+          .exp-timeline-track { left: 15px; }
+
+          .exp-tl-dot {
+            left: -44px; top: 14px;
+            width: 32px; height: 32px;
+            font-size: .85rem;
+          }
+
+          /* card top: stack vertically */
+          .exp-card-top {
+            flex-direction: column;
+            padding: 16px 14px 12px;
+            gap: 10px;
+          }
+
+          /* header row: keep role left, period right, wrap if needed */
+          .exp-header-row {
+            flex-wrap: wrap;
+            gap: 8px;
+          }
+
+          .exp-period-wrap {
+            flex-direction: row;
+            align-items: center;
+            gap: 8px;
+          }
+
+          /* stat badge: full-width inline strip */
+          .exp-stat-badge {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 8px 12px;
+            width: 100%;
+            min-width: unset;
+          }
+          .exp-stat-num { font-size: 1.35rem; }
+          .exp-stat-lbl { margin-top: 0; text-align: left; }
+
+          /* role font size */
+          .exp-role { font-size: clamp(1.1rem, 5vw, 1.35rem); }
+
+          /* points padding */
+          .exp-points { padding: 0 14px; }
+          .exp-points.expanded { padding: 4px 14px 14px; }
+          .exp-point { font-size: .82rem; gap: 8px; }
+
+          /* tags */
+          .exp-tags { padding: 0 14px 14px; gap: 5px; }
+          .exp-tag { font-size: .6rem; padding: 3px 8px; }
+
+          /* expand hint */
+          .exp-expand-hint { padding: 8px 14px 12px; font-size: .56rem; }
+
+          /* education */
+          .edu-inner { padding: 14px; gap: 12px; }
+          .edu-icon-wrap { width: 36px; height: 36px; font-size: 1.1rem; }
+          .edu-degree { font-size: .85rem; }
+          .edu-desc { font-size: .78rem; }
+
+          /* stats strip: 2-col grid on mobile */
+          .exp-stats-strip {
+            margin-top: 40px;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+          }
+          .exp-strip-cell {
+            border-right: 1px solid rgba(155,93,229,.08);
+            border-bottom: 1px solid rgba(155,93,229,.08);
+            padding: 16px 10px;
+          }
+          .exp-strip-cell:nth-child(even) { border-right: none; }
+          .exp-strip-cell:nth-child(3),
+          .exp-strip-cell:nth-child(4) { border-bottom: none; }
+
+          /* blobs: hide on very small screens to reduce clutter */
+          .exp-blob-a { display: none; }
+          .exp-blob-b { width: 160px; height: 160px; left: -50px; }
+        }
+
+        /* Very small phones */
+        @media (max-width: 380px) {
+          .exp-timeline { padding-left: 38px; }
+          .exp-tl-dot { left: -38px; width: 28px; height: 28px; font-size: .75rem; }
+          .exp-container { padding: 0 3.5%; }
+          .exp-card-top { padding: 14px 12px 10px; }
+          .exp-points { padding: 0 12px; }
+          .exp-points.expanded { padding: 4px 12px 12px; }
+          .exp-tags { padding: 0 12px 12px; }
         }
       `}</style>
 
       <section id="experience">
-        {/* Right blob: shrunk from 480px → 360px, moved up from bottom:-160px → bottom:80px, pulled inward from right:-120px → right:-60px */}
         <div className="exp-blob exp-blob-a"><MorphBlob color="#9b5de5" delay={3} id="a" /></div>
         <div className="exp-blob exp-blob-b"><MorphBlob color="#00f5d4" delay={6} id="b" /></div>
 
         <div className="exp-container" ref={secRef}>
 
-          {/* ── header ── */}
+          {/* header */}
           <div className="exp-eyebrow" style={{ opacity:secVisible?1:0, transform:secVisible?"none":"translateY(16px)", transition:"opacity .6s ease,transform .6s ease" }}>
             <span className="exp-eyebrow-line" />
             Background
@@ -576,10 +740,10 @@ export default function Experience() {
 
           <div className="exp-divider" style={{ opacity:secVisible?1:0, transform:secVisible?"scaleX(1)":"scaleX(0)", transformOrigin:"left", transition:"opacity .6s .3s ease,transform .6s .3s ease" }} />
 
-          {/* ── two-col layout ── */}
+          {/* two-col layout */}
           <div className="exp-layout">
 
-            {/* ──── LEFT: work ──── */}
+            {/* LEFT: work */}
             <div ref={leftRef}>
               <div className="exp-col-label">Work Experience</div>
               <div className="exp-timeline">
@@ -590,7 +754,7 @@ export default function Experience() {
               </div>
             </div>
 
-            {/* ──── RIGHT: education ──── */}
+            {/* RIGHT: education */}
             <div ref={rightRef}>
               <div className="exp-col-label" style={{ "--rose": "#c084fc" }}>Education</div>
               {education.map((ed, i) => (
