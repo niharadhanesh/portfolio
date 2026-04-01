@@ -1,18 +1,18 @@
 import { useState, useEffect } from "react";
 
 const links = [
-  { label: "Home", href: "#home" },
-  { label: "About", href: "#about" },
-  { label: "Skills", href: "#skills" },
-  { label: "Projects", href: "#projects" },
+  { label: "Home",       href: "#home" },
+  { label: "About",      href: "#about" },
+  { label: "Skills",     href: "#skills" },
+  { label: "Projects",   href: "#projects" },
   { label: "Experience", href: "#experience" },
-  { label: "Contact", href: "#contact" },
+  { label: "Contact",    href: "#contact" },
 ];
 
 export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
-  const [open, setOpen] = useState(false);
-  const [active, setActive] = useState("#home");
+  const [open, setOpen]         = useState(false);
+  const [active, setActive]     = useState("#home");
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 30);
@@ -20,197 +20,296 @@ export default function Navbar() {
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
-  const handleNav = (href) => {
-    setActive(href);
-    setOpen(false);
-  };
+  /* lock body scroll when overlay is open */
+  useEffect(() => {
+    document.body.style.overflow = open ? "hidden" : "";
+    return () => { document.body.style.overflow = ""; };
+  }, [open]);
+
+  const handleNav = (href) => { setActive(href); setOpen(false); };
 
   return (
     <>
       <style>{`
-        .navbar {
+        @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Bebas+Neue&family=Share+Tech+Mono&display=swap');
+
+        /* ── tokens (mirror Hero) ── */
+        :root {
+          --nb-rose:   #ff3b6b;
+          --nb-violet: #9b5de5;
+          --nb-cyan:   #00f5d4;
+          --nb-ink:    #f5f0ff;
+          --nb-ink2:   #8b7da8;
+          --nb-ink3:   #4a3f62;
+          --nb-bg:     #07050f;
+          --nb-mono:   'Share Tech Mono', monospace;
+          --nb-head:   'Bebas Neue', sans-serif;
+          --nb-body:   'Space Grotesk', sans-serif;
+        }
+
+        /* ── base reset for navbar elements ── */
+        .nb * { box-sizing: border-box; margin: 0; padding: 0; }
+        .nb a { text-decoration: none; }
+        .nb ul { list-style: none; }
+        .nb button { font-family: inherit; cursor: pointer; }
+
+        /* ── bar ── */
+        .nb {
           position: fixed;
           top: 0; left: 0;
           width: 100%;
           z-index: 1000;
-          transition: all 0.4s ease;
+          transition: background 0.4s ease, border-color 0.4s ease, box-shadow 0.4s ease;
+          border-bottom: 1px solid transparent;
         }
-        .navbar.scrolled {
-          background: rgba(13, 8, 18, 0.92);
-          backdrop-filter: blur(20px);
-          border-bottom: 1px solid rgba(244, 63, 110, 0.1);
+        .nb.scrolled {
+          background: rgba(7, 5, 15, 0.88);
+          backdrop-filter: blur(22px);
+          -webkit-backdrop-filter: blur(22px);
+          border-bottom-color: rgba(155, 93, 229, 0.12);
+          box-shadow: 0 4px 40px rgba(0,0,0,0.5);
         }
-        .nav-inner {
+
+        /* glowing top stripe — only when scrolled */
+        .nb.scrolled::before {
+          content: '';
+          position: absolute;
+          top: 0; left: 0; right: 0;
+          height: 1px;
+          background: linear-gradient(90deg, transparent, var(--nb-rose) 35%, var(--nb-violet) 65%, transparent);
+          opacity: 0.6;
+        }
+
+        .nb-inner {
           display: flex;
-          justify-content: space-between;
           align-items: center;
-          padding: 18px 5%;
-          max-width: 1140px;
-          margin: auto;
+          justify-content: space-between;
+          padding: 20px 6%;
+          max-width: 1400px;
+          margin: 0 auto;
+          gap: 24px;
         }
-        .nav-logo {
-          font-family: var(--font-display);
-          font-size: 1.5rem;
-          font-weight: 700;
-          background: linear-gradient(135deg, var(--rose-light), var(--lavender));
+
+        /* ── logo ── */
+        .nb-logo {
+          font-family: var(--nb-head);
+          font-size: 1.75rem;
+          letter-spacing: 0.08em;
+          background: linear-gradient(90deg, var(--nb-rose), var(--nb-violet));
           -webkit-background-clip: text;
           -webkit-text-fill-color: transparent;
           background-clip: text;
-          letter-spacing: -0.02em;
+          line-height: 1;
+          flex-shrink: 0;
+          transition: opacity 0.2s;
         }
-        .nav-links {
+        .nb-logo:hover { opacity: 0.85; }
+
+        /* ── desktop links ── */
+        .nb-links {
           display: flex;
-          gap: 6px;
           align-items: center;
+          gap: 2px;
         }
-        .nav-link {
-          font-size: 0.9rem;
-          font-weight: 500;
-          color: var(--text-muted);
-          padding: 7px 14px;
-          border-radius: 50px;
-          transition: all 0.25s ease;
-          font-family: var(--font-body);
+        .nb-link {
+          font-family: var(--nb-mono);
+          font-size: 0.68rem;
+          letter-spacing: 0.18em;
+          text-transform: uppercase;
+          color: var(--nb-ink2);
+          padding: 7px 13px;
+          border-radius: 4px;
+          transition: color 0.2s, background 0.2s;
+          position: relative;
         }
-        .nav-link:hover { color: var(--text); }
-        .nav-link.active {
-          color: var(--rose-light);
-          background: rgba(244, 63, 110, 0.1);
+        .nb-link::after {
+          content: '';
+          position: absolute;
+          bottom: 2px; left: 13px; right: 13px;
+          height: 1px;
+          background: var(--nb-rose);
+          transform: scaleX(0);
+          transition: transform 0.25s ease;
+          transform-origin: left;
         }
-        .nav-cta {
-          background: linear-gradient(135deg, var(--rose), #e8275a);
-          color: #fff !important;
-          box-shadow: 0 4px 16px rgba(244,63,110,0.3);
+        .nb-link:hover { color: var(--nb-ink); }
+        .nb-link:hover::after { transform: scaleX(1); }
+        .nb-link.active { color: var(--nb-rose); }
+        .nb-link.active::after { transform: scaleX(1); }
+
+        /* ── status pill ── */
+        .nb-pill {
+          font-family: var(--nb-mono);
+          font-size: 0.62rem;
+          letter-spacing: 0.12em;
+          padding: 6px 13px;
+          border: 1px solid rgba(0, 245, 212, 0.22);
+          border-radius: 4px;
+          color: var(--nb-cyan);
+          display: flex;
+          align-items: center;
+          gap: 7px;
+          white-space: nowrap;
+          flex-shrink: 0;
+          transition: border-color 0.2s, box-shadow 0.2s;
         }
-        .nav-cta:hover {
-          box-shadow: 0 6px 24px rgba(244,63,110,0.5);
-          transform: translateY(-1px);
+        .nb-pill:hover {
+          border-color: rgba(0, 245, 212, 0.4);
+          box-shadow: 0 0 14px rgba(0, 245, 212, 0.12);
+        }
+        .nb-pulse {
+          width: 6px; height: 6px;
+          border-radius: 50%;
+          background: var(--nb-cyan);
+          flex-shrink: 0;
+          animation: nb-pulse 2s ease infinite;
+        }
+        @keyframes nb-pulse {
+          0%, 100% { box-shadow: 0 0 0 0 rgba(0,245,212,0.5); }
+          50%       { box-shadow: 0 0 0 5px rgba(0,245,212,0); }
         }
 
-        /* Icon-only toggle button */
-        .menu-toggle {
+        /* ── hamburger ── */
+        .nb-toggle {
           display: none;
-          width: 42px;
-          height: 42px;
-          border-radius: 12px;
-          background: rgba(244, 63, 110, 0.08);
-          border: 1px solid rgba(244, 63, 110, 0.25);
-          cursor: pointer;
+          width: 40px; height: 40px;
+          border-radius: 6px;
+          background: rgba(155, 93, 229, 0.06);
+          border: 1px solid rgba(155, 93, 229, 0.2);
           align-items: center;
           justify-content: center;
-          transition: all 0.25s ease;
-          padding: 0;
+          transition: background 0.2s, border-color 0.2s;
           flex-shrink: 0;
         }
-        .menu-toggle:hover {
-          background: rgba(244, 63, 110, 0.15);
-          border-color: rgba(244, 63, 110, 0.45);
+        .nb-toggle:hover {
+          background: rgba(155, 93, 229, 0.12);
+          border-color: rgba(155, 93, 229, 0.4);
         }
-        .toggle-icon {
-          width: 18px;
-          height: 14px;
-          position: relative;
+        .nb-bars {
+          width: 18px; height: 13px;
           display: flex;
           flex-direction: column;
           justify-content: space-between;
+          position: relative;
         }
-        .toggle-icon span {
+        .nb-bars span {
           display: block;
-          width: 100%;
-          height: 2px;
+          width: 100%; height: 1.5px;
           border-radius: 2px;
-          background: var(--rose-light);
-          transition: all 0.3s ease;
+          background: var(--nb-violet);
+          transition: transform 0.3s ease, opacity 0.3s ease, width 0.3s ease;
           transform-origin: center;
         }
-        .menu-toggle.open .toggle-icon span:nth-child(1) {
-          transform: translateY(6px) rotate(45deg);
-        }
-        .menu-toggle.open .toggle-icon span:nth-child(2) {
-          opacity: 0;
-          transform: scaleX(0);
-        }
-        .menu-toggle.open .toggle-icon span:nth-child(3) {
-          transform: translateY(-6px) rotate(-45deg);
-        }
+        .nb-bars span:nth-child(2) { width: 75%; align-self: flex-end; }
+        .nb-toggle.open .nb-bars span:nth-child(1) { transform: translateY(5.75px) rotate(45deg); width: 100%; }
+        .nb-toggle.open .nb-bars span:nth-child(2) { opacity: 0; transform: scaleX(0); }
+        .nb-toggle.open .nb-bars span:nth-child(3) { transform: translateY(-5.75px) rotate(-45deg); }
 
-        /* Mobile overlay */
-        .mobile-menu {
-          display: none;
+        /* ── mobile overlay ── */
+        .nb-overlay {
           position: fixed;
-          top: 0; left: 0; right: 0; bottom: 0;
-          background: rgba(13, 8, 18, 0.97);
-          backdrop-filter: blur(20px);
+          inset: 0;
           z-index: 999;
+          background: rgba(7, 5, 15, 0.97);
+          backdrop-filter: blur(24px);
+          -webkit-backdrop-filter: blur(24px);
+          display: flex;
           flex-direction: column;
           align-items: center;
           justify-content: center;
-          gap: 16px;
-          animation: fadeIn 0.25s ease;
+          gap: 8px;
+          opacity: 0;
+          pointer-events: none;
+          transition: opacity 0.3s ease;
         }
-        .mobile-menu.open { display: flex; }
-        .mobile-link {
-          font-family: var(--font-display);
-          font-size: 2rem;
-          font-weight: 700;
-          color: var(--text-muted);
-          transition: color 0.2s;
+        .nb-overlay.open {
+          opacity: 1;
+          pointer-events: all;
         }
-        .mobile-link:hover { color: var(--rose-light); }
 
-        /* Close button inside overlay — X icon only, no text */
-        .mobile-close {
-          position: absolute;
-          top: 20px; right: 5%;
-          width: 42px;
-          height: 42px;
-          border-radius: 12px;
-          background: rgba(244, 63, 110, 0.08);
-          border: 1px solid rgba(244, 63, 110, 0.25);
-          cursor: pointer;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          padding: 0;
-          transition: all 0.25s ease;
-        }
-        .mobile-close:hover {
-          background: rgba(244, 63, 110, 0.18);
-          border-color: rgba(244, 63, 110, 0.5);
-        }
-        .close-icon {
-          width: 14px;
-          height: 14px;
-          position: relative;
-        }
-        .close-icon::before,
-        .close-icon::after {
+        /* grid decoration inside overlay */
+        .nb-overlay::before {
           content: '';
-          position: absolute;
-          top: 50%; left: 0;
-          width: 100%;
-          height: 2px;
-          border-radius: 2px;
-          background: var(--rose-light);
+          position: absolute; inset: 0;
+          background-image:
+            linear-gradient(rgba(155,93,229,0.04) 1px, transparent 1px),
+            linear-gradient(90deg, rgba(155,93,229,0.04) 1px, transparent 1px);
+          background-size: 60px 60px;
+          pointer-events: none;
         }
-        .close-icon::before { transform: translateY(-50%) rotate(45deg); }
-        .close-icon::after  { transform: translateY(-50%) rotate(-45deg); }
 
+        /* overlay links — animate in staggered */
+        .nb-m-link {
+          font-family: var(--nb-head);
+          font-size: clamp(2.5rem, 10vw, 4rem);
+          letter-spacing: 0.06em;
+          color: var(--nb-ink3);
+          position: relative;
+          z-index: 1;
+          transform: translateY(16px);
+          opacity: 0;
+          transition: color 0.2s, letter-spacing 0.2s, opacity 0.35s ease, transform 0.35s ease;
+        }
+        .nb-overlay.open .nb-m-link {
+          opacity: 1;
+          transform: translateY(0);
+        }
+        .nb-overlay.open .nb-m-link:nth-child(1) { transition-delay: 0.05s; }
+        .nb-overlay.open .nb-m-link:nth-child(2) { transition-delay: 0.10s; }
+        .nb-overlay.open .nb-m-link:nth-child(3) { transition-delay: 0.15s; }
+        .nb-overlay.open .nb-m-link:nth-child(4) { transition-delay: 0.20s; }
+        .nb-overlay.open .nb-m-link:nth-child(5) { transition-delay: 0.25s; }
+        .nb-overlay.open .nb-m-link:nth-child(6) { transition-delay: 0.30s; }
+
+        .nb-m-link:hover { color: var(--nb-ink); letter-spacing: 0.1em; }
+        .nb-m-link.active {
+          background: linear-gradient(90deg, var(--nb-rose), var(--nb-violet));
+          -webkit-background-clip: text;
+          -webkit-text-fill-color: transparent;
+          background-clip: text;
+        }
+
+        /* overlay bottom tag */
+        .nb-overlay-tag {
+          position: absolute;
+          bottom: 32px;
+          font-family: var(--nb-mono);
+          font-size: 0.62rem;
+          color: var(--nb-ink3);
+          letter-spacing: 0.18em;
+          text-transform: uppercase;
+          z-index: 1;
+          opacity: 0;
+          transition: opacity 0.4s 0.35s ease;
+        }
+        .nb-overlay.open .nb-overlay-tag { opacity: 1; }
+
+        /* ── responsive ── */
+        @media (max-width: 960px) {
+          .nb-pill { display: none; }
+        }
         @media (max-width: 768px) {
-          .nav-links { display: none; }
-          .menu-toggle { display: flex; }
+          .nb-links  { display: none; }
+          .nb-toggle { display: flex; }
+          .nb-inner  { padding: 16px 5%; }
+        }
+        @media (max-width: 480px) {
+          .nb-logo { font-size: 1.5rem; }
+          .nb-inner { padding: 14px 5%; }
         }
       `}</style>
 
-      <nav className={`navbar ${scrolled ? "scrolled" : ""}`}>
-        <div className="nav-inner">
-          <a href="#home" className="nav-logo">Nihara.</a>
-          <ul className="nav-links">
+      {/* ── bar ── */}
+      <nav className={`nb ${scrolled ? "scrolled" : ""}`}>
+        <div className="nb-inner">
+          <a href="#home" className="nb-logo">Nihara.</a>
+
+          <ul className="nb-links">
             {links.map((l) => (
               <li key={l.href}>
                 <a
                   href={l.href}
-                  className={`nav-link ${l.label === "Contact" ? "nav-cta" : ""} ${active === l.href ? "active" : ""}`}
+                  className={`nb-link ${active === l.href ? "active" : ""}`}
                   onClick={() => handleNav(l.href)}
                 >
                   {l.label}
@@ -219,29 +318,37 @@ export default function Navbar() {
             ))}
           </ul>
 
+          <div className="nb-pill">
+            <span className="nb-pulse" />
+            Available for work
+          </div>
+
           <button
-            className={`menu-toggle ${open ? "open" : ""}`}
+            className={`nb-toggle ${open ? "open" : ""}`}
             onClick={() => setOpen(!open)}
             aria-label="Toggle menu"
           >
-            <div className="toggle-icon">
-              <span />
-              <span />
-              <span />
+            <div className="nb-bars">
+              <span /><span /><span />
             </div>
           </button>
         </div>
       </nav>
 
-      <div className={`mobile-menu ${open ? "open" : ""}`}>
-        <button className="mobile-close" onClick={() => setOpen(false)} aria-label="Close menu">
-          <div className="close-icon" />
-        </button>
+      {/* ── mobile overlay ── */}
+      <div className={`nb-overlay ${open ? "open" : ""}`} aria-hidden={!open}>
         {links.map((l) => (
-          <a key={l.href} href={l.href} className="mobile-link" onClick={() => handleNav(l.href)}>
+          <a
+            key={l.href}
+            href={l.href}
+            className={`nb-m-link ${active === l.href ? "active" : ""}`}
+            onClick={() => handleNav(l.href)}
+          >
             {l.label}
           </a>
         ))}
+
+        <span className="nb-overlay-tag">&lt; nihara.py · python 3.11 /&gt;</span>
       </div>
     </>
   );
